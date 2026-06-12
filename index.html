@@ -194,6 +194,43 @@
     .input-panel { display: block; }
     .input-panel.hidden { display: none; }
 
+    .upload-row {
+      margin-bottom: 14px;
+    }
+
+    .upload-btn {
+      width: 100%;
+      min-height: 52px;
+      padding: 12px 20px;
+      font-family: var(--font-display);
+      font-size: var(--fs-md);
+      font-weight: 600;
+      color: var(--pine);
+      background: var(--surface);
+      border: 2px solid var(--pine-mid);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background 0.15s, transform 0.12s, opacity 0.15s;
+    }
+
+    .upload-btn:hover:not(:disabled) {
+      background: var(--pine-soft);
+    }
+
+    .upload-btn:active:not(:disabled) { transform: scale(0.98); }
+
+    .upload-btn:focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    .upload-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      border-color: var(--border);
+      color: var(--text-secondary);
+    }
+
     textarea {
       width: 100%;
       min-height: 200px;
@@ -486,6 +523,96 @@
 
     .modal-save:hover { background: var(--pine-mid); }
     .modal-save:active { transform: scale(0.98); }
+
+    .modal--ocr { max-width: 520px; }
+
+    .ocr-preview {
+      display: block;
+      width: 100%;
+      max-height: 180px;
+      object-fit: contain;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: #FAF6F0;
+      margin-bottom: 14px;
+    }
+
+    .ocr-edit-text {
+      width: 100%;
+      min-height: 140px;
+      padding: 14px 16px;
+      font-family: var(--font-body);
+      font-size: var(--fs-body);
+      line-height: var(--lh-body);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: #FAF6F0;
+      resize: vertical;
+      margin-bottom: 12px;
+    }
+
+    .ocr-edit-text:focus {
+      outline: none;
+      border-color: var(--pine-mid);
+      box-shadow: var(--focus-ring);
+      background: var(--surface);
+    }
+
+    .ocr-modal-error {
+      margin: 0 0 12px;
+      padding: 12px 14px;
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      color: #8f2f28;
+      background: var(--fake-bg);
+      border: 1px solid var(--fake-soft);
+      border-radius: var(--radius-sm);
+      display: none;
+    }
+
+    .ocr-modal-error.visible { display: block; }
+
+    .ocr-modal-loading {
+      text-align: center;
+      padding: 24px 8px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .ocr-modal-loading .loading-scan {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 14px;
+    }
+
+    .ocr-modal-body.hidden { display: none; }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .modal-cancel {
+      flex: 1;
+      min-height: 54px;
+      padding: 14px;
+      font-family: var(--font-display);
+      font-size: var(--fs-md);
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .modal-cancel:hover { background: #eee9e0; }
+
+    .modal-actions .modal-save {
+      flex: 2;
+      margin: 0;
+    }
 
     /* --- Result --- */
     #result {
@@ -818,6 +945,99 @@
       line-height: var(--lh-tight);
     }
 
+    .reply-section {
+      margin-bottom: 20px;
+    }
+
+    .reply-section h3 {
+      font-family: var(--font-display);
+      font-size: var(--fs-min);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--text-label);
+      margin: 0 0 10px;
+    }
+
+    .reply-box {
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: #fff;
+      margin-bottom: 12px;
+    }
+
+    .reply-box:last-child {
+      margin-bottom: 0;
+    }
+
+    .reply-box-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .reply-box-label {
+      font-size: var(--fs-min);
+      font-weight: 700;
+      color: var(--text-label);
+    }
+
+    .copy-btn {
+      flex-shrink: 0;
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: var(--fs-min);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .copy-btn:hover {
+      background: #F0EDE6;
+      border-color: var(--text-muted);
+    }
+
+    .copy-btn.copied {
+      border-color: var(--credible);
+      color: var(--credible);
+    }
+
+    .reply-box p {
+      margin: 0;
+      font-size: var(--fs-body);
+      line-height: var(--lh-body);
+      color: var(--text);
+      white-space: pre-wrap;
+    }
+
+    .copy-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(30, 28, 24, 0.92);
+      color: #fff;
+      font-size: var(--fs-min);
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+      z-index: 1000;
+    }
+
+    .copy-toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
     .sources-section h3 {
       font-family: var(--font-display);
       font-size: var(--fs-min);
@@ -841,6 +1061,61 @@
     }
 
     .sources-section li:last-child { border-bottom: none; }
+
+    .web-sources-section {
+      margin-bottom: 20px;
+      padding-top: 4px;
+    }
+
+    .web-sources-section h3 {
+      font-family: var(--font-display);
+      font-size: var(--fs-min);
+      font-weight: 700;
+      margin: 0 0 12px;
+      color: var(--pine);
+    }
+
+    .web-sources-section ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .web-sources-section li {
+      padding: 12px 0;
+      font-size: var(--fs-body);
+      line-height: var(--lh-body);
+      border-bottom: 1px solid #EDE8E0;
+    }
+
+    .web-sources-section li:last-child { border-bottom: none; }
+
+    .web-source-snippet {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .web-source-meta {
+      font-size: var(--fs-min);
+      color: var(--text-muted);
+    }
+
+    .web-source-meta a {
+      color: var(--pine);
+      text-decoration: underline;
+    }
+
+    .grounding-badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 6px 12px;
+      font-size: var(--fs-min);
+      color: var(--text-muted);
+      background: #F5F0E8;
+      border-radius: var(--radius-sm);
+      line-height: 1.5;
+    }
 
     .phone-link {
       font-weight: 700;
@@ -980,25 +1255,20 @@
 <body>
   <div class="container">
     <header>
-      <div class="header-top">
-        <div>
-          <h1>เช็กชัวร์</h1>
-        </div>
-        <button type="button" class="settings-btn" id="settingsBtn" aria-label="ตั้งค่า API Key" title="ตั้งค่า">⚙</button>
-      </div>
+      <h1>เช็กชัวร์</h1>
       <p class="tagline">เช็กข้อความก่อนเชื่อ ก่อนแชร์</p>
       <span class="mode-chip" id="modeChip" aria-live="polite">โหมดสาธิต</span>
     </header>
 
-    <div class="info-banner" id="fileProtocolBanner" role="status">
-      <strong>เปิดไฟล์โดยตรง — โหมด AI ใช้ไม่ได้</strong>
-      เบราว์เซอร์บล็อกการเรียก Gemini จาก <code>file://</code> ตัวอย่างยังใช้ได้ แต่ข้อความจริงต้องเปิดผ่านเซิร์ฟเวอร์ท้องถิ่น:
-      <code>cd CheckSure; python -m http.server 8080</code>
-      แล้วเปิด <strong>http://localhost:8080</strong>
-    </div>
-
     <div class="workspace" id="workspace">
+      <div class="info-banner" id="infoBanner" role="status"></div>
+
       <div class="input-panel" id="inputPanel">
+        <div class="upload-row">
+          <button type="button" class="upload-btn" id="uploadBtn" disabled title="กำลังตรวจสอบการเชื่อมต่อ…">อัปโหลดรูป</button>
+          <input type="file" id="photoInput" accept="image/jpeg,image/png,image/*" capture="environment" hidden />
+        </div>
+
         <textarea id="messageInput" placeholder="วางข้อความที่ได้รับมา…" rows="6" aria-label="ข้อความที่ต้องการตรวจสอบ"></textarea>
 
         <p class="chips-label">ลองตัวอย่าง</p>
@@ -1023,6 +1293,7 @@
           <p class="verdict-stamp-kicker">ผลการประเมิน</p>
           <p class="verdict-stamp-label" id="verdictLabel"></p>
           <p class="summary" id="summaryText"></p>
+          <p class="grounding-badge" id="groundingBadge" hidden></p>
         </div>
 
         <div class="result-body" id="resultBody">
@@ -1046,6 +1317,11 @@
             <p id="reasonText"></p>
           </div>
 
+          <div class="detail-section web-sources-section" id="webSourcesSection" hidden>
+            <h3>ข้อมูลจากแหล่ง fact-check</h3>
+            <ul id="webSourcesList"></ul>
+          </div>
+
           <div class="detail-section" id="redFlagsSection">
             <h3><span class="icon" aria-hidden="true">⚠</span> สัญญาณอันตราย</h3>
             <ul id="redFlagsList"></ul>
@@ -1054,6 +1330,24 @@
           <div class="advice-box">
             <h3>ควรทำอย่างไร</h3>
             <p id="adviceText"></p>
+          </div>
+
+          <div class="reply-section" id="replySection">
+            <h3>คำตอบพร้อมส่ง</h3>
+            <div class="reply-box" id="replyPoliteBox">
+              <div class="reply-box-header">
+                <span class="reply-box-label">🙏 คำตอบสุภาพ</span>
+                <button type="button" class="copy-btn" id="copyPoliteBtn" data-copy-target="replyPoliteText">คัดลอก</button>
+              </div>
+              <p id="replyPoliteText"></p>
+            </div>
+            <div class="reply-box" id="replyFirmBox">
+              <div class="reply-box-header">
+                <span class="reply-box-label">💬 คำตอบกระชับ</span>
+                <button type="button" class="copy-btn" id="copyFirmBtn" data-copy-target="replyFirmText">คัดลอก</button>
+              </div>
+              <p id="replyFirmText"></p>
+            </div>
           </div>
 
           <div class="sources-section" id="sourcesSection">
@@ -1069,34 +1363,51 @@
     <p class="page-disclaimer">AI ช่วยประเมิน ไม่ใช่คำตัดสินสุดท้าย</p>
   </div>
 
-  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal">
-      <button type="button" class="modal-close" id="modalClose" aria-label="ปิด">×</button>
-      <h2 id="modalTitle">ตั้งค่า API Key</h2>
-      <p class="modal-hint">ใส่ Gemini API Key เพื่อวิเคราะห์ข้อความจริง — ขอฟรีได้ที่ <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">Google AI Studio</a></p>
-      <p class="modal-warn" id="modalFileWarn">เปิดหน้านี้จากไฟล์โดยตรง (file://) — API จะเชื่อมต่อไม่ได้ ให้รัน <code>cd CheckSure; python -m http.server 8080</code> แล้วเปิด http://localhost:8080</p>
-      <label for="apiKeyInput">API Key (เก็บแค่ในเซสชันนี้)</label>
-      <input type="password" id="apiKeyInput" placeholder="วาง API Key ที่นี่" autocomplete="off">
-      <button type="button" class="modal-save" id="modalSave">บันทึก</button>
+  <div class="copy-toast" id="copyToast" role="status" aria-live="polite">คัดลอกแล้ว</div>
+
+  <div class="modal-backdrop" id="ocrModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="ocrModalTitle" hidden>
+    <div class="modal modal--ocr">
+      <button type="button" class="modal-close" id="ocrModalClose" aria-label="ปิด">×</button>
+      <h2 id="ocrModalTitle">ตรวจสอบข้อความจากรูป</h2>
+      <p class="modal-hint">แก้ไขข้อความให้ตรงกับรูปก่อนวิเคราะห์</p>
+
+      <div class="ocr-modal-loading" id="ocrModalLoading" hidden>
+        <div class="loading-scan" aria-hidden="true"></div>
+        <p id="ocrModalLoadingStatus">กำลังอ่านข้อความจากรูป…</p>
+      </div>
+
+      <div class="ocr-modal-body" id="ocrModalBody">
+        <img class="ocr-preview" id="ocrPreview" alt="รูปที่อัปโหลด" />
+        <p class="ocr-modal-error" id="ocrModalError" role="alert"></p>
+        <label for="ocrEditText">ข้อความที่อ่านได้</label>
+        <textarea class="ocr-edit-text" id="ocrEditText" placeholder="พิมพ์ข้อความจากรูปด้วยตนเอง…" rows="6"></textarea>
+        <div class="modal-actions">
+          <button type="button" class="modal-cancel" id="ocrModalCancel">ยกเลิก</button>
+          <button type="button" class="modal-save" id="ocrModalConfirm">ใช้ข้อความนี้</button>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
-    const MODEL = "gemini-2.5-flash";
-    const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
-    const LOADING_MIN_MS = 1400;
+    const BAKED_LOADING_MS = 1400;
     const LOADING_MESSAGES = [
       "กำลังอ่านข้อความ…",
+      "กำลังค้นหาข้อมูลจากแหล่งจริง…",
       "ตรวจหาสัญญาณหลอกลวง…",
       "ประเมินความน่าเชื่อถือ…"
     ];
 
-    const FILE_PROTOCOL_MSG =
-      "เปิดไฟล์โดยตรง (file://) ทำให้เรียก AI ไม่ได้ — เปิดเทอร์มินัลในโฟลเดอร์ CheckSure แล้วรัน: python -m http.server 8080 จากนั้นเปิด http://localhost:8080";
+    let backendLive = false;
+    let ocrReady = false;
+    let ocrPreviewUrl = null;
+    let ocrInFlight = false;
+    let ocrLoadingInterval = null;
 
-    function isFileProtocol() {
-      return window.location.protocol === "file:";
-    }
+    const OCR_LOADING_MESSAGES = [
+      "กำลังอ่านข้อความจากรูป…",
+      "กำลังจัดลำดับข้อความ…"
+    ];
 
     const VERDICT_LABELS = {
       fake: "น่าจะหลอกลวง / ข่าวปลอม",
@@ -1150,9 +1461,11 @@
         },
         red_flags_th: { type: "ARRAY", items: { type: "STRING" } },
         advice_th: { type: "STRING" },
-        source_ids: { type: "ARRAY", items: { type: "STRING", enum: SOURCE_ID_ENUM } }
+        source_ids: { type: "ARRAY", items: { type: "STRING", enum: SOURCE_ID_ENUM } },
+        reply_polite_th: { type: "STRING" },
+        reply_firm_th: { type: "STRING" }
       },
-      required: ["verdict", "confidence", "category", "summary_th", "reason_th", "highlights", "red_flags_th", "advice_th", "source_ids"]
+      required: ["verdict", "confidence", "category", "summary_th", "reason_th", "highlights", "red_flags_th", "advice_th", "source_ids", "reply_polite_th", "reply_firm_th"]
     };
 
     const SYSTEM_PROMPT = `คุณเป็นนักวิเคราะห์ข่าวปลอมภาษาไทยที่ระมัดระวัง อ่อนโยน และซื่อสัตย์ หน้าที่ของคุณคือช่วยผู้สูงอายุไทยประเมินข้อความที่ถูกแชร์ต่อใน LINE ว่าน่าเชื่อถือแค่ไหน
@@ -1215,7 +1528,9 @@
             "ชวนแชร์ต่อแบบเร่งด่วน"
           ],
           advice_th: "อย่าเชื่อและอย่าแชร์ต่อ หากมีคนในครอบครัวป่วยมะเร็ง ควรปรึกษาแพทย์โรคมะเร็งโดยตรง",
-          source_ids: ["antifake", "sureandshare", "fda"]
+          source_ids: ["antifake", "sureandshare", "fda"],
+          reply_polite_th: "ขอบคุณที่แชร์มานะคะ/ครับ เรื่องรักษามะเร็งด้วยน้ำมะพร้าวใน 7 วัน ยังไม่มีหลักฐานทางการแพทย์รองรับค่ะ/ครับ ถ้าสนใจเรื่องสุขภาพ ลองเช็กจาก อย. หรือถามแพทย์ก่อนแชร์ต่อจะปลอดภัยกว่านะคะ/ครับ",
+          reply_firm_th: "ข้อความนี้ไม่มีหลักฐานทางการแพทย์รองรับ มะเร็งไม่มีการรักษาให้หายขาดใน 7 วันด้วยเครื่องดื่มธรรมชาติ อย่าแชร์ต่อและอย่าหยุดการรักษาจากแพทย์"
         }
       },
       {
@@ -1239,7 +1554,9 @@
             "ขอข้อมูลบัญชีธนาคารโดยไม่มีบริษัทที่ตรวจสอบได้"
           ],
           advice_th: "อย่าโอนเงินหรือให้ข้อมูลบัญชี หากสนใจลงทุนจริง ควรปรึกษาธนาคารหรือที่ปรึกษาการเงินที่ได้รับใบอนุญาต",
-          source_ids: ["antifake", "sureandshare", "sec", "aoc"]
+          source_ids: ["antifake", "sureandshare", "sec", "aoc"],
+          reply_polite_th: "ขอบคุณที่แจ้งมาค่ะ/ครับ ผลตอบแทน 30% ต่อเดือนแบบรับประกัน 100% ฟังดูสูงเกินจริงมาก ถ้าสนใจลงทุนจริง ลองปรึกษาธนาคารหรือ ก.ล.ต. ก่อนตัดสินใจนะคะ/ครับ",
+          reply_firm_th: "ผลตอบแทน 30%/เดือนรับประกันคืนเงิน 100% เป็นรูปแบบหลอกลวงที่พบบ่อย อย่าโอนเงินหรือให้เลขบัญชี"
         }
       },
       // {
@@ -1285,7 +1602,9 @@
             "ชวนแชร์ต่อก่อนยืนยันความจริง"
           ],
           advice_th: "อย่าแชร์ต่อจนกว่าจะตรวจสอบจากประกาศของ กสทช. หรือผู้ให้บริการโทรศัพท์โดยตรง",
-          source_ids: ["antifake", "sureandshare", "gov"]
+          source_ids: ["antifake", "sureandshare", "gov"],
+          reply_polite_th: "ขอบคุณที่แชร์มานะคะ/ครับ เรื่องนี้ยังเป็นข่าวลือ ยังไม่มีประกาศจาก กสทช. หรือผู้ให้บริการค่ะ/ครับ รอเช็กจากแหล่งทางการก่อนแชร์ต่อจะดีกว่านะคะ/ครับ",
+          reply_firm_th: "ข่าวนี้ยังยืนยันไม่ได้ ยังไม่มีประกาศจาก กสทช. หรือผู้ให้บริการ อย่าแชร์ต่อจนกว่าจะมีแหล่งทางการ"
         }
       },
       {
@@ -1304,17 +1623,17 @@
           ],
           red_flags_th: [],
           advice_th: "สามารถนำคำแนะนำไปปฏิบัติได้ หากต้องการยืนยันเพิ่มเติม สามารถเช็กที่เว็บไซต์กรมควบคุมโรคโดยตรง",
-          source_ids: ["antifake", "sureandshare", "gov"]
+          source_ids: ["antifake", "sureandshare", "gov"],
+          reply_polite_th: "ขอบคุณที่แชร์ข้อมูลมาค่ะ/ครับ ดูเป็นคำแนะนำสุขภาพทั่วไปจากหน่วยงานราชการ น่าเชื่อถือค่ะ/ครับ ถ้าอยากมั่นใจเพิ่ม เช็กที่ www.ddc.moph.go.th ได้เลยนะคะ/ครับ",
+          reply_firm_th: "ข้อความนี้เป็นคำแนะนำสาธารณสุขทั่วไป อ้างอิงกรมควบคุมโรคและเว็บ .go.th ไม่พบสัญญาณหลอกลวง"
         }
       }
     ];
 
-    let apiKey = "";
     let loadingInterval = null;
     let typewriterTimer = null;
     let currentMessage = "";
 
-    const settingsBtn = document.getElementById("settingsBtn");
     const modeChip = document.getElementById("modeChip");
     const messageInput = document.getElementById("messageInput");
     const chipsContainer = document.getElementById("chips");
@@ -1335,17 +1654,37 @@
     const highlightedMessage = document.getElementById("highlightedMessage");
     const hlDetailContainer = document.getElementById("hlDetailContainer");
     const reasonText = document.getElementById("reasonText");
+    const webSourcesSection = document.getElementById("webSourcesSection");
+    const webSourcesList = document.getElementById("webSourcesList");
+    const groundingBadge = document.getElementById("groundingBadge");
     const redFlagsSection = document.getElementById("redFlagsSection");
     const redFlagsList = document.getElementById("redFlagsList");
     const adviceText = document.getElementById("adviceText");
+    const replySection = document.getElementById("replySection");
+    const replyPoliteBox = document.getElementById("replyPoliteBox");
+    const replyFirmBox = document.getElementById("replyFirmBox");
+    const replyPoliteText = document.getElementById("replyPoliteText");
+    const replyFirmText = document.getElementById("replyFirmText");
+    const copyPoliteBtn = document.getElementById("copyPoliteBtn");
+    const copyFirmBtn = document.getElementById("copyFirmBtn");
+    const copyToast = document.getElementById("copyToast");
     const sourcesSection = document.getElementById("sourcesSection");
     const sourcesList = document.getElementById("sourcesList");
-    const modalBackdrop = document.getElementById("modalBackdrop");
-    const modalClose = document.getElementById("modalClose");
-    const apiKeyInput = document.getElementById("apiKeyInput");
-    const modalSave = document.getElementById("modalSave");
-    const fileProtocolBanner = document.getElementById("fileProtocolBanner");
-    const modalFileWarn = document.getElementById("modalFileWarn");
+    const infoBanner = document.getElementById("infoBanner");
+    const uploadBtn = document.getElementById("uploadBtn");
+    const photoInput = document.getElementById("photoInput");
+    const ocrModalBackdrop = document.getElementById("ocrModalBackdrop");
+    const ocrModalClose = document.getElementById("ocrModalClose");
+    const ocrModalCancel = document.getElementById("ocrModalCancel");
+    const ocrModalConfirm = document.getElementById("ocrModalConfirm");
+    const ocrModalLoading = document.getElementById("ocrModalLoading");
+    const ocrModalLoadingStatus = document.getElementById("ocrModalLoadingStatus");
+    const ocrModalBody = document.getElementById("ocrModalBody");
+    const ocrModalError = document.getElementById("ocrModalError");
+    const ocrPreview = document.getElementById("ocrPreview");
+    const ocrEditText = document.getElementById("ocrEditText");
+
+    let copyToastTimer = null;
 
     function normalize(text) {
       return text.trim().replace(/\s+/g, " ");
@@ -1356,41 +1695,222 @@
       return EXAMPLES.find((ex) => normalize(ex.message) === normalized);
     }
 
-    function hasKey() {
-      return apiKey.trim().length > 0;
-    }
-
     function updateModeChip() {
-      if (hasKey()) {
-        modeChip.textContent = "เชื่อมต่อ AI แล้ว";
+      if (backendLive) {
+        modeChip.textContent = "AI ในเครื่อง + ค้นเว็บ";
         modeChip.classList.add("live");
       } else {
         modeChip.textContent = "โหมดสาธิต";
         modeChip.classList.remove("live");
       }
+      updateUploadButton();
     }
 
-    function openModal() {
-      apiKeyInput.value = apiKey;
-      modalFileWarn.classList.toggle("visible", isFileProtocol());
-      modalBackdrop.classList.add("open");
-      apiKeyInput.focus();
+    function showInfoBanner(message) {
+      if (!message) {
+        infoBanner.classList.remove("visible");
+        infoBanner.textContent = "";
+        return;
+      }
+      infoBanner.textContent = message;
+      infoBanner.classList.add("visible");
     }
 
-    function initFileProtocolNotice() {
-      if (isFileProtocol()) {
-        fileProtocolBanner.classList.add("visible");
+    function updateUploadButton() {
+      if (!backendLive) {
+        uploadBtn.disabled = true;
+        uploadBtn.title = "ต้องเริ่ม backend ก่อน";
+        return;
+      }
+      if (!ocrReady) {
+        uploadBtn.disabled = true;
+        uploadBtn.title = "ระบบ OCR ยังไม่พร้อม";
+        return;
+      }
+      uploadBtn.disabled = ocrInFlight;
+      uploadBtn.title = ocrInFlight ? "กำลังอ่านรูป…" : "อัปโหลดรูปภาพจากแกลเลอรีหรือถ่ายภาพ";
+    }
+
+    async function pingHealth() {
+      try {
+        const response = await fetch("/health", { signal: AbortSignal.timeout(3000) });
+        if (!response.ok) throw new Error("health failed");
+        const data = await response.json();
+        backendLive = data.status === "ok" && data.ollama;
+        ocrReady = Boolean(data.ocr_ready);
+        if (backendLive && !ocrReady) {
+          showInfoBanner("ระบบ OCR ยังไม่พร้อม — วางข้อความเองได้");
+        } else {
+          showInfoBanner("");
+        }
+      } catch {
+        backendLive = false;
+        ocrReady = false;
+        showInfoBanner("");
+      }
+      updateModeChip();
+    }
+
+    function revokeOcrPreview() {
+      if (ocrPreviewUrl) {
+        URL.revokeObjectURL(ocrPreviewUrl);
+        ocrPreviewUrl = null;
       }
     }
 
-    function closeModal() {
-      modalBackdrop.classList.remove("open");
+    function openOcrModal() {
+      ocrModalBackdrop.removeAttribute("hidden");
+      ocrModalBackdrop.classList.add("open");
+      document.body.style.overflow = "hidden";
     }
 
-    function saveKey() {
-      apiKey = apiKeyInput.value.trim();
-      updateModeChip();
-      closeModal();
+    function stopOcrLoadingMessages() {
+      if (ocrLoadingInterval) {
+        clearInterval(ocrLoadingInterval);
+        ocrLoadingInterval = null;
+      }
+    }
+
+    function closeOcrModal() {
+      stopOcrLoadingMessages();
+      ocrModalBackdrop.classList.remove("open");
+      ocrModalBackdrop.setAttribute("hidden", "");
+      document.body.style.overflow = "";
+      ocrModalLoading.hidden = true;
+      ocrModalBody.classList.remove("hidden");
+      ocrModalError.classList.remove("visible");
+      ocrModalError.textContent = "";
+      ocrEditText.value = "";
+      revokeOcrPreview();
+      ocrPreview.removeAttribute("src");
+      photoInput.value = "";
+    }
+
+    function showOcrModalLoading() {
+      ocrModalLoading.hidden = false;
+      ocrModalBody.classList.add("hidden");
+      ocrModalError.classList.remove("visible");
+      ocrModalError.textContent = "";
+      stopOcrLoadingMessages();
+      let idx = 0;
+      ocrModalLoadingStatus.textContent = OCR_LOADING_MESSAGES[0];
+      ocrLoadingInterval = setInterval(() => {
+        idx = (idx + 1) % OCR_LOADING_MESSAGES.length;
+        ocrModalLoadingStatus.textContent = OCR_LOADING_MESSAGES[idx];
+      }, 2000);
+    }
+
+    function showOcrModalContent() {
+      stopOcrLoadingMessages();
+      ocrModalLoading.hidden = true;
+      ocrModalBody.classList.remove("hidden");
+    }
+
+    function showOcrModalError(message) {
+      ocrModalError.textContent = message;
+      ocrModalError.classList.add("visible");
+    }
+
+    async function callOcr(file) {
+      const formData = new FormData();
+      formData.append("file", file, file.name || "upload.jpg");
+
+      const response = await fetch("/ocr", {
+        method: "POST",
+        body: formData
+      });
+
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.detail || "OCR_FAILED");
+      }
+
+      return response.json();
+    }
+
+    async function handlePhotoSelected(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const allowedTypes = ["image/jpeg", "image/png"];
+      if (!allowedTypes.includes(file.type)) {
+        showError("รองรับเฉพาะไฟล์ JPEG หรือ PNG");
+        photoInput.value = "";
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        showError("ไฟล์ใหญ่เกินไป (สูงสุด 5 MB)");
+        photoInput.value = "";
+        return;
+      }
+
+      hideError();
+      revokeOcrPreview();
+      ocrPreviewUrl = URL.createObjectURL(file);
+      ocrPreview.src = ocrPreviewUrl;
+
+      openOcrModal();
+      showOcrModalLoading();
+      ocrInFlight = true;
+      updateUploadButton();
+
+      try {
+        const result = await callOcr(file);
+        ocrEditText.value = result.text || "";
+        showOcrModalContent();
+      } catch (err) {
+        showOcrModalContent();
+        const messages = {
+          OCR_FAILED: "อ่านข้อความจากรูปไม่สำเร็จ — แก้ไขหรือพิมพ์ข้อความเองได้",
+          "Failed to fetch": "ไม่สามารถเชื่อมต่อ backend ได้"
+        };
+        showOcrModalError(messages[err.message] || String(err.message) || messages.OCR_FAILED);
+        ocrEditText.value = "";
+        ocrEditText.focus();
+      } finally {
+        ocrInFlight = false;
+        updateUploadButton();
+      }
+    }
+
+    function confirmOcrText() {
+      const text = ocrEditText.value.trim();
+      if (!text) {
+        showOcrModalError("กรุณาใส่ข้อความก่อนวิเคราะห์");
+        ocrEditText.focus();
+        return;
+      }
+
+      messageInput.value = text;
+      closeOcrModal();
+      checkMessage();
+    }
+
+    async function callLocal(text) {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 120000);
+
+      try {
+        const response = await fetch("/check", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          signal: controller.signal,
+          body: JSON.stringify({ text })
+        });
+
+        if (!response.ok) {
+          const err = await response.json().catch(() => ({}));
+          throw new Error(err.detail || "CHECK_FAILED");
+        }
+
+        return await response.json();
+      } catch (err) {
+        if (err.name === "AbortError") throw new Error("TIMEOUT");
+        throw err;
+      } finally {
+        clearTimeout(timeout);
+      }
     }
 
     function hideError() {
@@ -1511,28 +2031,96 @@
       return li;
     }
 
-    function renderDemoModeCard() {
+    function renderBackendRequiredCard() {
       currentMessage = messageInput.value;
       resultCard.setAttribute("data-verdict", "demo");
       verdictIcon.textContent = VERDICT_ICONS.demo;
-      verdictLabel.textContent = "โหมดสาธิต";
-      summaryText.textContent = "ข้อความของคุณยังไม่ได้ถูกวิเคราะห์จริง — ต้องการ API Key ฟรีเพื่อให้ AI ตรวจสอบ";
+      verdictLabel.textContent = "ต้องเริ่ม backend ก่อน";
+      summaryText.textContent = "ข้อความของคุณยังไม่ได้ถูกวิเคราะห์จริง — รัน .\\start.ps1 แล้วเปิด http://localhost:8000";
 
       resultBody.style.display = "none";
 
-      const stamp = resultCard.querySelector(".verdict-stamp");
-      let demoBtn = stamp.querySelector(".demo-key-btn");
-      if (!demoBtn) {
-        demoBtn = document.createElement("button");
-        demoBtn.type = "button";
-        demoBtn.className = "demo-key-btn";
-        demoBtn.textContent = "ใส่ API Key เพื่อวิเคราะห์จริง";
-        demoBtn.addEventListener("click", openModal);
-        stamp.appendChild(demoBtn);
-      }
+      const demoBtn = resultCard.querySelector(".demo-key-btn");
+      if (demoBtn) demoBtn.remove();
 
       resultEl.classList.add("visible");
       resultEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function renderSources(matches) {
+      webSourcesList.innerHTML = "";
+      if (!matches || matches.length === 0) {
+        webSourcesSection.hidden = true;
+        return;
+      }
+
+      webSourcesSection.hidden = false;
+      matches.forEach((match) => {
+        const li = document.createElement("li");
+        const snippet = document.createElement("span");
+        snippet.className = "web-source-snippet";
+        snippet.textContent = match.snippet_th || "";
+
+        const meta = document.createElement("span");
+        meta.className = "web-source-meta";
+        let metaHtml = escapeHtml(match.source || "fact-check");
+        if (match.source_url) {
+          metaHtml += ` · <a href="${escapeHtml(match.source_url)}" target="_blank" rel="noopener noreferrer">ดูแหล่งอ้างอิง</a>`;
+        }
+        meta.innerHTML = metaHtml;
+
+        li.appendChild(snippet);
+        li.appendChild(meta);
+        webSourcesList.appendChild(li);
+      });
+    }
+
+    function showCopyToast() {
+      copyToast.classList.add("visible");
+      if (copyToastTimer) clearTimeout(copyToastTimer);
+      copyToastTimer = setTimeout(() => {
+        copyToast.classList.remove("visible");
+      }, 1800);
+    }
+
+    async function copyReplyText(text, button) {
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+        button.classList.add("copied");
+        button.textContent = "คัดลอกแล้ว";
+        showCopyToast();
+        setTimeout(() => {
+          button.classList.remove("copied");
+          button.textContent = "คัดลอก";
+        }, 2000);
+      } catch {
+        showError("ไม่สามารถคัดลอกได้ กรุณาคัดลอกด้วยตนเอง");
+      }
+    }
+
+    function renderReplies(obj) {
+      const polite = (obj.reply_polite_th || "").trim();
+      const firm = (obj.reply_firm_th || "").trim();
+
+      replyPoliteText.textContent = polite;
+      replyFirmText.textContent = firm;
+      replyPoliteBox.hidden = !polite;
+      replyFirmBox.hidden = !firm;
+      replySection.hidden = !polite && !firm;
+
+      copyPoliteBtn.disabled = !polite;
+      copyFirmBtn.disabled = !firm;
+    }
+
+    function renderGroundingBadge(grounding) {
+      if (grounding === "tone") {
+        groundingBadge.textContent = "ประเมินจากรูปแบบภาษา — ไม่พบหลักฐานจากเว็บ";
+        groundingBadge.hidden = false;
+      } else {
+        groundingBadge.textContent = "";
+        groundingBadge.hidden = true;
+      }
     }
 
     function renderVerdict(obj, message) {
@@ -1554,7 +2142,10 @@
       verdictLabel.textContent = VERDICT_LABELS[verdict];
       summaryText.textContent = obj.summary_th || "";
       reasonText.textContent = obj.reason_th || "";
+      renderSources(obj.sources);
+      renderGroundingBadge(obj.grounding);
       adviceText.textContent = obj.advice_th || "";
+      renderReplies(obj);
 
       confidenceRow.style.display = "";
       confidenceBar.querySelectorAll(".confidence-segment").forEach((seg) => {
@@ -1594,66 +2185,16 @@
       resultEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
 
-    async function callGemini(text, key) {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 20000);
-
-      try {
-        const response = await fetch(`${GEMINI_URL}?key=${encodeURIComponent(key)}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          signal: controller.signal,
-          body: JSON.stringify({
-            contents: [{ parts: [{ text }] }],
-            systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-            generationConfig: {
-              responseMimeType: "application/json",
-              responseSchema: VERDICT_SCHEMA
-            }
-          })
-        });
-
-        if (response.status === 429) throw new Error("RATE_LIMIT");
-        if (response.status === 400 || response.status === 403) throw new Error("INVALID_KEY");
-        if (response.status === 503 || response.status === 502 || response.status === 504) {
-          throw new Error("SERVICE_UNAVAILABLE");
-        }
-        if (!response.ok) throw new Error("API_ERROR");
-
-        const data = await response.json();
-        const textPart = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (!textPart) throw new Error("MALFORMED");
-
-        return JSON.parse(textPart);
-      } catch (err) {
-        if (err.name === "AbortError") throw new Error("TIMEOUT");
-        if (isFileProtocol() && (err.message === "Failed to fetch" || err.name === "TypeError")) {
-          throw new Error("FILE_PROTOCOL");
-        }
-        throw err;
-      } finally {
-        clearTimeout(timeout);
-      }
-    }
-
-    function handleApiError(err) {
+    function handleLocalError(err) {
       const messages = {
-        INVALID_KEY: "API Key ไม่ถูกต้องหรือหมดอายุ กรุณาตรวจสอบและใส่ใหม่",
-        RATE_LIMIT: "ใช้งานเกินขีดจำกัดชั่วคราว กรุณารอสักครู่แล้วลองใหม่",
-        SERVICE_UNAVAILABLE: "เซิร์ฟเวอร์ Gemini ไม่พร้อมชั่วคราว (503) กรุณารอ 1–2 นาทีแล้วลองใหม่",
-        MALFORMED: "ไม่สามารถวิเคราะห์ข้อความนี้ได้ กรุณาลองใหม่อีกครั้ง",
-        API_ERROR: "เกิดข้อผิดพลาดจากระบบ กรุณาลองใหม่ภายหลัง",
-        TIMEOUT: "การเชื่อมต่อใช้เวลานานเกินไป กรุณาลองใหม่",
-        FILE_PROTOCOL: FILE_PROTOCOL_MSG,
-        NETWORK: isFileProtocol()
-          ? FILE_PROTOCOL_MSG
-          : "ไม่สามารถเชื่อมต่อได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่"
+        TIMEOUT: "การวิเคราะห์ใช้เวลานานเกินไป กรุณาลองใหม่",
+        CHECK_FAILED: "ไม่สามารถวิเคราะห์ข้อความนี้ได้ กรุณาลองใหม่อีกครั้ง"
       };
 
-      if (err.message === "Failed to fetch" || (err.name === "TypeError" && !messages[err.message])) {
-        showError(messages.NETWORK);
+      if (err.message === "Failed to fetch" || err.name === "TypeError") {
+        showError("ไม่สามารถเชื่อมต่อ backend ได้ — รัน .\\start.ps1 แล้วลองใหม่");
       } else {
-        showError(messages[err.message] || messages.API_ERROR);
+        showError(messages[err.message] || String(err.message) || messages.CHECK_FAILED);
       }
     }
 
@@ -1666,58 +2207,33 @@
       }
 
       const example = findExample(message);
-      const key = hasKey();
-
-      if (key && isFileProtocol() && !example) {
-        hideError();
-        showError(FILE_PROTOCOL_MSG);
-        return;
-      }
 
       resultEl.classList.remove("visible");
       showLoading();
 
-      const start = Date.now();
-
       try {
         let verdict;
 
-        if (!key) {
-          await delay(LOADING_MIN_MS);
-          verdict = example ? example.verdict : null;
-        } else if (isFileProtocol() && example) {
-          await delay(LOADING_MIN_MS);
-          verdict = example.verdict;
+        if (backendLive) {
+          verdict = await callLocal(message);
         } else if (example) {
-          try {
-            const [result] = await Promise.all([
-              callGemini(message, apiKey.trim()),
-              delay(LOADING_MIN_MS)
-            ]);
-            verdict = result;
-          } catch {
-            const elapsed = Date.now() - start;
-            if (elapsed < LOADING_MIN_MS) await delay(LOADING_MIN_MS - elapsed);
-            verdict = example.verdict;
-          }
+          await delay(BAKED_LOADING_MS);
+          verdict = example.verdict;
         } else {
-          const [result] = await Promise.all([
-            callGemini(message, apiKey.trim()),
-            delay(LOADING_MIN_MS)
-          ]);
-          verdict = result;
+          hideLoading();
+          renderBackendRequiredCard();
+          return;
         }
 
         hideLoading();
-
-        if (!key && !example) {
-          renderDemoModeCard();
-        } else {
-          renderVerdict(verdict, message);
-        }
+        renderVerdict(verdict, message);
       } catch (err) {
         hideLoading();
-        handleApiError(err);
+        if (example && !backendLive) {
+          renderVerdict(example.verdict, message);
+        } else {
+          handleLocalError(err);
+        }
       }
     }
 
@@ -1777,23 +2293,30 @@
       });
     }
 
-    settingsBtn.addEventListener("click", openModal);
-    modalClose.addEventListener("click", closeModal);
-    modalSave.addEventListener("click", saveKey);
-
-    modalBackdrop.addEventListener("click", (e) => {
-      if (e.target === modalBackdrop) closeModal();
-    });
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && modalBackdrop.classList.contains("open")) closeModal();
-    });
-
-    apiKeyInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") saveKey();
-    });
-
     checkBtn.addEventListener("click", checkMessage);
+
+    uploadBtn.addEventListener("click", () => {
+      if (uploadBtn.disabled) return;
+      photoInput.click();
+    });
+
+    photoInput.addEventListener("change", handlePhotoSelected);
+
+    ocrModalClose.addEventListener("click", closeOcrModal);
+    ocrModalCancel.addEventListener("click", closeOcrModal);
+    ocrModalConfirm.addEventListener("click", confirmOcrText);
+
+    ocrModalBackdrop.addEventListener("click", (e) => {
+      if (e.target === ocrModalBackdrop) closeOcrModal();
+    });
+
+    copyPoliteBtn.addEventListener("click", () => {
+      copyReplyText(replyPoliteText.textContent, copyPoliteBtn);
+    });
+
+    copyFirmBtn.addEventListener("click", () => {
+      copyReplyText(replyFirmText.textContent, copyFirmBtn);
+    });
 
     messageInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
@@ -1802,9 +2325,9 @@
       }
     });
 
+    updateUploadButton();
     renderChips();
-    updateModeChip();
-    initFileProtocolNotice();
+    pingHealth();
   </script>
 </body>
 </html>

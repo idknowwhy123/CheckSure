@@ -19,7 +19,9 @@ pip-wheel-metadata/
 .coverage
 htmlcov/
 *.cover
-
+/docs/
+/tools/
+requirements.txt
 # --- Secrets & local config ---
 .env
 .env.*
@@ -28,12 +30,8 @@ htmlcov/
 credentials.json
 secrets.json
 
-# --- CheckSure backend / RAG ---
+# --- CheckSure backend ---
 backend/.venv/
-backend/qdrant_storage/
-backend/storage/
-qdrant_storage/
-*.sqlite3
 eval_results/
 eval_output/
 
@@ -58,7 +56,3 @@ Desktop.ini
 
 # --- Node (if added later) ---
 node_modules/
-
-AGENTS.md
-TASKS.md
-CheckSure-RAG-LocalAI-Plan.md
