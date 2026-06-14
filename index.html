@@ -1220,6 +1220,183 @@
 
     .modal-warn.visible { display: block; }
 
+    /* --- Debug search panel --- */
+    .debug-row {
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    .debug-link-btn {
+      font-family: var(--font-body);
+      font-size: var(--fs-min);
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: none;
+      border: none;
+      border-bottom: 1px dotted var(--border);
+      cursor: pointer;
+      padding: 4px 2px;
+    }
+
+    .debug-link-btn:hover { color: var(--pine); }
+    .debug-link-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .modal--debug {
+      max-width: 640px;
+      max-height: min(90vh, 820px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .debug-options {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .debug-options label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: var(--fs-min);
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      margin: 0;
+    }
+
+    .debug-options input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--pine);
+    }
+
+    .debug-run-btn {
+      padding: 10px 18px;
+      font-family: var(--font-body);
+      font-size: var(--fs-min);
+      font-weight: 700;
+      color: var(--surface);
+      background: var(--pine);
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .debug-run-btn:hover { background: var(--pine-mid); }
+    .debug-run-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .debug-results {
+      flex: 1;
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      padding: 14px;
+      font-size: var(--fs-min);
+      line-height: 1.55;
+      min-height: 200px;
+      max-height: 52vh;
+    }
+
+    .debug-results.empty {
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .debug-section {
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .debug-section:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .debug-section h3 {
+      margin: 0 0 8px;
+      font-family: var(--font-display);
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      color: var(--pine);
+    }
+
+    .debug-kv {
+      margin: 4px 0;
+      word-break: break-word;
+    }
+
+    .debug-kv strong {
+      color: var(--text-label);
+      font-weight: 700;
+    }
+
+    .debug-tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 6px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .debug-tag {
+      padding: 4px 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.9rem;
+    }
+
+    .debug-pass-meta {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .debug-hit {
+      margin: 8px 0;
+      padding: 10px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    .debug-hit-meta {
+      font-weight: 700;
+      color: var(--pine);
+      margin-bottom: 4px;
+      word-break: break-all;
+    }
+
+    .debug-hit-meta a {
+      color: var(--pine);
+    }
+
+    .debug-hit-snippet {
+      margin: 0;
+      color: var(--text-secondary);
+    }
+
+    .debug-error {
+      color: var(--fake);
+      font-weight: 700;
+    }
+
+    .debug-loading {
+      text-align: center;
+      padding: 24px;
+      color: var(--text-secondary);
+    }
+
     .page-disclaimer {
       padding: 16px 20px;
       text-align: center;
@@ -1275,6 +1452,12 @@
         <div class="chips" id="chips" role="group" aria-label="ตัวอย่างข้อความ"></div>
 
         <button type="button" class="check-btn" id="checkBtn">ตรวจสอบ</button>
+
+        <div class="debug-row">
+          <button type="button" class="debug-link-btn" id="debugOpenBtn" disabled title="ต้องเริ่ม backend ก่อน">
+            🔎 ทดสอบการค้นหา (debug)
+          </button>
+        </div>
       </div>
 
       <div class="loading-panel" id="loadingPanel" aria-live="polite" aria-busy="true">
@@ -1332,7 +1515,7 @@
             <p id="adviceText"></p>
           </div>
 
-          <div class="reply-section" id="replySection">
+          <div class="reply-section" id="replySection" hidden>
             <h3>คำตอบพร้อมส่ง</h3>
             <div class="reply-box" id="replyPoliteBox">
               <div class="reply-box-header">
@@ -1368,8 +1551,8 @@
   <div class="modal-backdrop" id="ocrModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="ocrModalTitle" hidden>
     <div class="modal modal--ocr">
       <button type="button" class="modal-close" id="ocrModalClose" aria-label="ปิด">×</button>
-      <h2 id="ocrModalTitle">ตรวจสอบข้อความจากรูป</h2>
-      <p class="modal-hint">แก้ไขข้อความให้ตรงกับรูปก่อนวิเคราะห์</p>
+      <h2 id="ocrModalTitle">ตรวจสอบข้อความจากอินโฟกราฟิก</h2>
+      <p class="modal-hint">แก้ไขลำดับ/คำผิดก่อนวิเคราะห์</p>
 
       <div class="ocr-modal-loading" id="ocrModalLoading" hidden>
         <div class="loading-scan" aria-hidden="true"></div>
@@ -1385,6 +1568,28 @@
           <button type="button" class="modal-cancel" id="ocrModalCancel">ยกเลิก</button>
           <button type="button" class="modal-save" id="ocrModalConfirm">ใช้ข้อความนี้</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="debugModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="debugModalTitle" hidden>
+    <div class="modal modal--debug">
+      <button type="button" class="modal-close" id="debugModalClose" aria-label="ปิด">×</button>
+      <h2 id="debugModalTitle">ทดสอบการสกัดข้อความและค้นหา Tavily</h2>
+      <p class="modal-hint">ใช้ข้อความในช่องด้านบน — ดูว่า LLM สกัดคำค้นอะไร และ Tavily คืนอะไรกลับมา</p>
+
+      <div class="debug-options">
+        <label>
+          <input type="checkbox" id="debugExtractOnly" />
+          สกัดข้อความอย่างเดียว (ไม่เรียก Tavily)
+        </label>
+        <button type="button" class="debug-run-btn" id="debugRunBtn">รันทดสอบ</button>
+      </div>
+
+      <p class="ocr-modal-error" id="debugModalError" role="alert"></p>
+
+      <div class="debug-results empty" id="debugResults" aria-live="polite">
+        กด「รันทดสอบ」เพื่อดูผล
       </div>
     </div>
   </div>
@@ -1406,7 +1611,7 @@
 
     const OCR_LOADING_MESSAGES = [
       "กำลังอ่านข้อความจากรูป…",
-      "กำลังจัดลำดับข้อความ…"
+      "กำลังจัดลำดับตามเลย์เอาต์…"
     ];
 
     const VERDICT_LABELS = {
@@ -1461,11 +1666,9 @@
         },
         red_flags_th: { type: "ARRAY", items: { type: "STRING" } },
         advice_th: { type: "STRING" },
-        source_ids: { type: "ARRAY", items: { type: "STRING", enum: SOURCE_ID_ENUM } },
-        reply_polite_th: { type: "STRING" },
-        reply_firm_th: { type: "STRING" }
+        source_ids: { type: "ARRAY", items: { type: "STRING", enum: SOURCE_ID_ENUM } }
       },
-      required: ["verdict", "confidence", "category", "summary_th", "reason_th", "highlights", "red_flags_th", "advice_th", "source_ids", "reply_polite_th", "reply_firm_th"]
+      required: ["verdict", "confidence", "category", "summary_th", "reason_th", "highlights", "red_flags_th", "advice_th", "source_ids"]
     };
 
     const SYSTEM_PROMPT = `คุณเป็นนักวิเคราะห์ข่าวปลอมภาษาไทยที่ระมัดระวัง อ่อนโยน และซื่อสัตย์ หน้าที่ของคุณคือช่วยผู้สูงอายุไทยประเมินข้อความที่ถูกแชร์ต่อใน LINE ว่าน่าเชื่อถือแค่ไหน
@@ -1528,9 +1731,7 @@
             "ชวนแชร์ต่อแบบเร่งด่วน"
           ],
           advice_th: "อย่าเชื่อและอย่าแชร์ต่อ หากมีคนในครอบครัวป่วยมะเร็ง ควรปรึกษาแพทย์โรคมะเร็งโดยตรง",
-          source_ids: ["antifake", "sureandshare", "fda"],
-          reply_polite_th: "ขอบคุณที่แชร์มานะคะ/ครับ เรื่องรักษามะเร็งด้วยน้ำมะพร้าวใน 7 วัน ยังไม่มีหลักฐานทางการแพทย์รองรับค่ะ/ครับ ถ้าสนใจเรื่องสุขภาพ ลองเช็กจาก อย. หรือถามแพทย์ก่อนแชร์ต่อจะปลอดภัยกว่านะคะ/ครับ",
-          reply_firm_th: "ข้อความนี้ไม่มีหลักฐานทางการแพทย์รองรับ มะเร็งไม่มีการรักษาให้หายขาดใน 7 วันด้วยเครื่องดื่มธรรมชาติ อย่าแชร์ต่อและอย่าหยุดการรักษาจากแพทย์"
+          source_ids: ["antifake", "sureandshare", "fda"]
         }
       },
       {
@@ -1554,9 +1755,7 @@
             "ขอข้อมูลบัญชีธนาคารโดยไม่มีบริษัทที่ตรวจสอบได้"
           ],
           advice_th: "อย่าโอนเงินหรือให้ข้อมูลบัญชี หากสนใจลงทุนจริง ควรปรึกษาธนาคารหรือที่ปรึกษาการเงินที่ได้รับใบอนุญาต",
-          source_ids: ["antifake", "sureandshare", "sec", "aoc"],
-          reply_polite_th: "ขอบคุณที่แจ้งมาค่ะ/ครับ ผลตอบแทน 30% ต่อเดือนแบบรับประกัน 100% ฟังดูสูงเกินจริงมาก ถ้าสนใจลงทุนจริง ลองปรึกษาธนาคารหรือ ก.ล.ต. ก่อนตัดสินใจนะคะ/ครับ",
-          reply_firm_th: "ผลตอบแทน 30%/เดือนรับประกันคืนเงิน 100% เป็นรูปแบบหลอกลวงที่พบบ่อย อย่าโอนเงินหรือให้เลขบัญชี"
+          source_ids: ["antifake", "sureandshare", "sec", "aoc"]
         }
       },
       // {
@@ -1602,9 +1801,7 @@
             "ชวนแชร์ต่อก่อนยืนยันความจริง"
           ],
           advice_th: "อย่าแชร์ต่อจนกว่าจะตรวจสอบจากประกาศของ กสทช. หรือผู้ให้บริการโทรศัพท์โดยตรง",
-          source_ids: ["antifake", "sureandshare", "gov"],
-          reply_polite_th: "ขอบคุณที่แชร์มานะคะ/ครับ เรื่องนี้ยังเป็นข่าวลือ ยังไม่มีประกาศจาก กสทช. หรือผู้ให้บริการค่ะ/ครับ รอเช็กจากแหล่งทางการก่อนแชร์ต่อจะดีกว่านะคะ/ครับ",
-          reply_firm_th: "ข่าวนี้ยังยืนยันไม่ได้ ยังไม่มีประกาศจาก กสทช. หรือผู้ให้บริการ อย่าแชร์ต่อจนกว่าจะมีแหล่งทางการ"
+          source_ids: ["antifake", "sureandshare", "gov"]
         }
       },
       {
@@ -1623,9 +1820,7 @@
           ],
           red_flags_th: [],
           advice_th: "สามารถนำคำแนะนำไปปฏิบัติได้ หากต้องการยืนยันเพิ่มเติม สามารถเช็กที่เว็บไซต์กรมควบคุมโรคโดยตรง",
-          source_ids: ["antifake", "sureandshare", "gov"],
-          reply_polite_th: "ขอบคุณที่แชร์ข้อมูลมาค่ะ/ครับ ดูเป็นคำแนะนำสุขภาพทั่วไปจากหน่วยงานราชการ น่าเชื่อถือค่ะ/ครับ ถ้าอยากมั่นใจเพิ่ม เช็กที่ www.ddc.moph.go.th ได้เลยนะคะ/ครับ",
-          reply_firm_th: "ข้อความนี้เป็นคำแนะนำสาธารณสุขทั่วไป อ้างอิงกรมควบคุมโรคและเว็บ .go.th ไม่พบสัญญาณหลอกลวง"
+          source_ids: ["antifake", "sureandshare", "gov"]
         }
       }
     ];
@@ -1683,8 +1878,16 @@
     const ocrModalError = document.getElementById("ocrModalError");
     const ocrPreview = document.getElementById("ocrPreview");
     const ocrEditText = document.getElementById("ocrEditText");
+    const debugOpenBtn = document.getElementById("debugOpenBtn");
+    const debugModalBackdrop = document.getElementById("debugModalBackdrop");
+    const debugModalClose = document.getElementById("debugModalClose");
+    const debugExtractOnly = document.getElementById("debugExtractOnly");
+    const debugRunBtn = document.getElementById("debugRunBtn");
+    const debugModalError = document.getElementById("debugModalError");
+    const debugResults = document.getElementById("debugResults");
 
     let copyToastTimer = null;
+    let debugInFlight = false;
 
     function normalize(text) {
       return text.trim().replace(/\s+/g, " ");
@@ -1720,8 +1923,12 @@
       if (!backendLive) {
         uploadBtn.disabled = true;
         uploadBtn.title = "ต้องเริ่ม backend ก่อน";
+        debugOpenBtn.disabled = true;
+        debugOpenBtn.title = "ต้องเริ่ม backend ก่อน";
         return;
       }
+      debugOpenBtn.disabled = false;
+      debugOpenBtn.title = "ทดสอบการสกัดข้อความและผลค้นหา Tavily";
       if (!ocrReady) {
         uploadBtn.disabled = true;
         uploadBtn.title = "ระบบ OCR ยังไม่พร้อม";
@@ -1885,6 +2092,163 @@
       messageInput.value = text;
       closeOcrModal();
       checkMessage();
+    }
+
+    function openDebugModal() {
+      debugModalError.classList.remove("visible");
+      debugModalError.textContent = "";
+      debugResults.classList.add("empty");
+      debugResults.innerHTML = "กด「รันทดสอบ」เพื่อดูผล";
+      debugModalBackdrop.removeAttribute("hidden");
+      debugModalBackdrop.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeDebugModal() {
+      debugModalBackdrop.classList.remove("open");
+      debugModalBackdrop.setAttribute("hidden", "");
+      document.body.style.overflow = "";
+      debugInFlight = false;
+      debugRunBtn.disabled = false;
+    }
+
+    function renderDebugTagList(items) {
+      if (!items || items.length === 0) {
+        return '<p class="debug-kv">—</p>';
+      }
+      const tags = items.map((t) => `<li class="debug-tag">${escapeHtml(String(t))}</li>`).join("");
+      return `<ul class="debug-tag-list">${tags}</ul>`;
+    }
+
+    function renderDebugHit(hit, label) {
+      const url = hit.url || hit.source_url || "";
+      const score = hit.score != null ? hit.score : "—";
+      const snippet = hit.content || hit.text || "";
+      const meta = url
+        ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(url)}</a>`
+        : escapeHtml(label || "ผลลัพธ์");
+      return `
+        <div class="debug-hit">
+          <div class="debug-hit-meta">score ${escapeHtml(String(score))} · ${meta}</div>
+          <p class="debug-hit-snippet">${escapeHtml(String(snippet).slice(0, 280))}${snippet.length > 280 ? "…" : ""}</p>
+        </div>`;
+    }
+
+    function renderDebugResults(data) {
+      const structured = data.structured || {};
+      let html = "";
+
+      html += `<div class="debug-section">
+        <h3>สกัดข้อความ (LLM)</h3>
+        <p class="debug-kv"><strong>core_claim:</strong> ${escapeHtml(structured.core_claim || "—")}</p>
+        <p class="debug-kv"><strong>entities:</strong></p>
+        ${renderDebugTagList(structured.entities)}
+        <p class="debug-kv"><strong>broad_queries:</strong></p>
+        ${renderDebugTagList(structured.broad_queries)}
+        <p class="debug-kv"><strong>narrow_queries:</strong></p>
+        ${renderDebugTagList(structured.narrow_queries)}
+        <p class="debug-kv"><strong>official_advisory:</strong> ${data.official_advisory ? "ใช่ (ไม่ใส่ suffix ข่าวปลอม)" : "ไม่"}</p>
+      </div>`;
+
+      if (data.extract_only) {
+        const preview = data.pass1_queries_preview || [];
+        html += `<div class="debug-section">
+          <h3>คำค้น pass1 (พร้อม suffix)</h3>
+          ${renderDebugTagList(preview)}
+        </div>`;
+        debugResults.classList.remove("empty");
+        debugResults.innerHTML = html;
+        return;
+      }
+
+      (data.passes || []).forEach((pass) => {
+        html += `<div class="debug-section">
+          <h3>${escapeHtml(pass.name || "pass")} · ${escapeHtml(pass.domain_mode || "")}</h3>
+          <p class="debug-pass-meta">queries: ${escapeHtml((pass.queries || []).join(" | ") || "—")} · hits: ${pass.hit_count ?? 0} · sufficient: ${pass.sufficient ? "ใช่" : "ไม่"}</p>`;
+
+        (pass.traces || []).forEach((trace) => {
+          html += `<p class="debug-kv"><strong>query:</strong> ${escapeHtml(trace.query || "—")}</p>`;
+          if (trace.error) {
+            html += `<p class="debug-error">${escapeHtml(trace.error)}</p>`;
+          }
+          const rawResults = trace.raw_results || [];
+          if (rawResults.length === 0 && !trace.error) {
+            html += `<p class="debug-kv">ไม่มีผลลัพธ์จาก Tavily</p>`;
+          }
+          rawResults.forEach((raw) => html += renderDebugHit(raw));
+        });
+
+        html += `</div>`;
+      });
+
+      const finalHits = data.production_evidence || [];
+      html += `<div class="debug-section">
+        <h3>ผลสุดท้ายที่ส่งให้ LLM (${finalHits.length} รายการ)</h3>`;
+      if (finalHits.length === 0) {
+        html += `<p class="debug-kv">ไม่มีหลักฐานจากเว็บ — จะใช้โหมด tone-only</p>`;
+      } else {
+        finalHits.forEach((hit) => {
+          html += renderDebugHit({
+            url: hit.source_url,
+            score: "—",
+            content: hit.text,
+          }, hit.source);
+        });
+      }
+      html += `</div>`;
+
+      if (data.top_score != null) {
+        html += `<p class="debug-kv"><strong>top_score:</strong> ${Number(data.top_score).toFixed(2)} · <strong>pass2_used:</strong> ${data.pass2_used ? "ใช่" : "ไม่"}</p>`;
+      }
+
+      debugResults.classList.remove("empty");
+      debugResults.innerHTML = html;
+    }
+
+    async function runDebugSearch() {
+      const text = messageInput.value.trim();
+      if (!text) {
+        debugModalError.textContent = "กรุณาวางข้อความในช่องด้านบนก่อน";
+        debugModalError.classList.add("visible");
+        return;
+      }
+
+      debugModalError.classList.remove("visible");
+      debugModalError.textContent = "";
+      debugInFlight = true;
+      debugRunBtn.disabled = true;
+      debugResults.classList.remove("empty");
+      debugResults.innerHTML = '<div class="debug-loading">กำลังทดสอบ…</div>';
+
+      try {
+        const response = await fetch("/debug/search", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text,
+            extract_only: debugExtractOnly.checked,
+          }),
+        });
+
+        if (!response.ok) {
+          const err = await response.json().catch(() => ({}));
+          throw new Error(err.detail || `HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        renderDebugResults(data);
+      } catch (err) {
+        debugResults.classList.add("empty");
+        debugResults.innerHTML = "";
+        const msg = err.message === "Failed to fetch"
+          ? "ไม่สามารถเชื่อมต่อ backend ได้"
+          : String(err.message || err);
+        debugModalError.textContent = msg;
+        debugModalError.classList.add("visible");
+      } finally {
+        debugInFlight = false;
+        debugRunBtn.disabled = false;
+      }
     }
 
     async function callLocal(text) {
@@ -2295,6 +2659,18 @@
 
     checkBtn.addEventListener("click", checkMessage);
 
+    debugOpenBtn.addEventListener("click", () => {
+      if (debugOpenBtn.disabled) return;
+      openDebugModal();
+    });
+
+    debugModalClose.addEventListener("click", closeDebugModal);
+    debugRunBtn.addEventListener("click", runDebugSearch);
+
+    debugModalBackdrop.addEventListener("click", (e) => {
+      if (e.target === debugModalBackdrop) closeDebugModal();
+    });
+
     uploadBtn.addEventListener("click", () => {
       if (uploadBtn.disabled) return;
       photoInput.click();
@@ -2322,6 +2698,12 @@
       if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
         e.preventDefault();
         checkMessage();
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && debugModalBackdrop.classList.contains("open")) {
+        closeDebugModal();
       }
     });
 

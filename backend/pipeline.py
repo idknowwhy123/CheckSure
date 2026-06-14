@@ -6,6 +6,7 @@ from typing import Any
 
 from backend import config
 from backend.llm import generate_verdict
+from backend.stance import classify_stances
 from backend.websearch import search_for_message
 
 
@@ -34,6 +35,8 @@ def run_check(text: str, use_web: bool = True) -> dict[str, Any]:
 
     if use_web:
         hits = search_for_message(message)
+        if hits and config.STANCE_ENABLED:
+            hits = classify_stances(message, hits)
         if hits:
             evidence = hits
 

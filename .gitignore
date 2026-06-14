@@ -56,3 +56,8 @@ Desktop.ini
 
 # --- Node (if added later) ---
 node_modules/
+
+#--test--#
+tests/
+testdata/
+notebooks

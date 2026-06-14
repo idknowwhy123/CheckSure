@@ -4,7 +4,7 @@ Thai LINE message fact-checker — **local Gemma3 reasoning** + **web search gro
 
 Paste a forwarded message **or upload a LINE screenshot** → the backend searches Thai fact-check sites → returns a color-coded verdict with real source URLs. When nothing is found, it falls back to tone-based analysis (clearly labelled).
 
-Photo flow: **อัปโหลดรูป** → EasyOCR reads each text box → **gemma3:4b sequences boxes by layout** → you review/edit in a modal → auto-check runs on the confirmed text.
+Photo flow: **อัปโหลดรูปอินโฟกราฟิก** → EasyOCR reads each text box → **gemma3:4b multimodal orders by layout** → you review/edit in a modal → auto-check runs on the confirmed text. For LINE chat text, paste instead of uploading.
 
 ## First-time setup
 
@@ -50,7 +50,7 @@ Open **http://localhost:8000** — mode chip should show `AI ในเครื�
 
 ### Photo upload demo
 
-1. Tap **อัปโหลดรูป** and pick a LINE screenshot (JPEG/PNG, max 5 MB)
+1. Tap **อัปโหลดรูป** and pick an infographic image (JPEG/PNG, max 5 MB)
 2. Review/edit extracted text in the modal → **ใช้ข้อความนี้**
 3. Verdict card appears automatically (same as paste flow)
 
@@ -58,27 +58,46 @@ Open **http://localhost:8000** — mode chip should show `AI ในเครื�
 
 ```
 index.html  →  GET /health, POST /check, POST /ocr
-backend/    →  websearch.py (Tavily) + llm.py (Gemma3) + ocr.py (EasyOCR) + ocr_order.py + prompt.py + pipeline.py
+backend/    →  websearch.py (Tavily) + llm.py (Gemma3) + ocr.py (EasyOCR)
+              + ocr_preprocess.py + ocr_order.py + ollama_chat.py + pipeline.py
 ```
 
 Tunables live in `backend/config.py` (models, domains, search limits).
 
-### OCR reading order
+### OCR reading order (infographics)
 
-Two-stage local OCR (no extra model):
+Pipeline for uploaded images:
 
-1. **EasyOCR** — detects and recognizes each text box (`detail=1`)
-2. **gemma3:4b** (same model as verdict) — orders box ids using normalized `cx`/`cy` coordinates
+1. **OpenCV** — dark-background invert (if needed) + thumbnail for layout
+2. **EasyOCR** — per-box detection/recognition (`detail=1`, `paragraph=False`)
+3. **VRAM release** — unload EasyOCR before Gemma vision (6 GB GPU discipline)
+4. **gemma3:4b multimodal** — orders box IDs using thumbnail + bbox manifest (fallback when layout heuristics decline)
+5. User confirms text in modal → **`POST /check`** (unchanged verdict flow)
 
-If LLM ordering fails or is disabled, falls back to geometric sort (top→bottom, left→right).
+Ordering cascade: **numbered panels → column clusters → multimodal → geometric**.
+
+`POST /ocr` response:
+
+```json
+{
+  "text": "...",
+  "order_path": "panel_numbered | column | multimodal | geometric | single_box",
+  "box_count": 12,
+  "dropped_boxes": 0
+}
+```
 
 | Env var | Default | Purpose |
 |---|---|---|
-| `OCR_ORDER_ENABLED` | `true` | Set `false` for geometric-only (faster, less accurate on messy layouts) |
-| `OCR_MAX_BOXES` | `40` | Above this count, skip LLM and use geometric sort |
-| `OCR_ORDER_TIMEOUT_SEC` | `30` | LLM ordering timeout before geometric fallback |
+| `OCR_ORDER_ENABLED` | `true` | Set `false` to skip multimodal fallback (layout heuristics still run) |
+| `OCR_MAX_BOXES` | `40` | Above this count, skip multimodal and use geometric sort |
+| `OCR_ORDER_TIMEOUT_SEC` | `30` | Multimodal ordering timeout before geometric fallback |
+| `OCR_INVERT_LUMINANCE_THRESHOLD` | `110` | Mean border luminance below this triggers invert before OCR |
+| `OCR_THUMBNAIL_MAX_SIDE` | `512` | Thumbnail cap for Gemma vision (shrink if GPU OOM) |
 
-Typical `/ocr` latency adds ~2–5s for LLM ordering on multi-box LINE screenshots.
+Smoke test: `python -m backend.ocr_smoke testdata/ocr/your-image.jpg` (see `testdata/ocr/README.md`).
+
+Typical `/ocr` latency adds ~5–15s on multi-box infographics (OCR + multimodal order).
 
 ## Troubleshooting
 
